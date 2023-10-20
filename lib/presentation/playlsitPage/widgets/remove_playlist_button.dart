@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_app_getx/controller/playlist_songs_list_controller.dart';
 
-removefromPlaylist(int id, int playlistId) {
+removefromPlaylist(int id, int playlistId, BuildContext context) {
   final playlistSongsController = Get.find<PlaylistSongsController>();
   return Padding(
     padding: const EdgeInsets.only(left: 18.0, right: 18, top: 8),
@@ -13,7 +13,7 @@ removefromPlaylist(int id, int playlistId) {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xff121526)),
         onPressed: () {
-          Get.back();
+          Navigator.pop(context);
           playlistSongsController.removeFromPlaylist(id, playlistId);
         },
         child: const Text(

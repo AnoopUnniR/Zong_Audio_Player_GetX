@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_app_getx/controller/all_songs_controller.dart';
+import 'package:music_app_getx/controller/current_playing_song_controller.dart';
 import 'package:music_app_getx/controller/most_played_songs.dart';
 import 'package:music_app_getx/functions/music_get_func.dart';
 import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
@@ -11,6 +12,8 @@ class MostPlayedPage extends StatelessWidget {
   MostPlayedPage({super.key});
   final allSongs = Get.find<AllSongsController>();
   final musicFucntion = MusicFunctionsClass();
+  final currentplayingController = Get.find<CurrentPlayingSongController>();
+
   // final mostPlayedController = Get.find<MostPlayedController>();
   // final mostPlayedController = Get.put(MostPlayedController());
   @override
@@ -55,6 +58,7 @@ class MostPlayedPage extends StatelessWidget {
 
                         // mostPlayedDetails.clear();
                         songs.addAll(mostPlayedController.mostPlayed);
+                        (songs);
                         return GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -66,23 +70,20 @@ class MostPlayedPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             int songIndex =
                                 mostPlayedController.mostPlayed[index];
-                            // var path = allSongs.songsList[songIndex].songuri;
                             var title = allSongs.songsList[songIndex].songTitle;
-                            // var artist =
                             allSongs.songsList[songIndex].songArtist!;
-                            // var image = allSongs.songsList[songIndex].imageId;
                             var id = allSongs.songsList[songIndex].id;
                             return InkWell(
                               child: Card(
                                 color: Colors.white,
                                 child: Stack(
                                   children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(allSongs
-                                          .songsList[songIndex].mostplayedCount
-                                          .toString()),
-                                    ),
+                                    // Align(
+                                    //   alignment: Alignment.topLeft,
+                                    //   child: Text(allSongs
+                                    //       .songsList[songIndex].mostplayedCount
+                                    //       .toString()),
+                                    // ),
                                     Align(
                                       alignment: Alignment.topRight,
                                       child:
@@ -115,10 +116,15 @@ class MostPlayedPage extends StatelessWidget {
                                 ),
                               ),
                               onTap: () async {
+                                currentplayingController.currentSongUpdate(id);
+                                Get.to(() => MusicPlayerScreen(
+                                      index: index,
+                                      songsIds: mostPlayedController.mostPlayed,
+                                    ));
                                 await musicFucntion.creatingPlayerList(
                                     mostPlayedController.mostPlayed);
                                 await musicFucntion.playingAudio(index);
-                                Get.to(() => MusicPlayerScreen(index: index,songsIds: songs,));
+                                // await musicFucntion.playingAudio(index);
                                 // musicFunction.update(mostPlayedList,index);
                               },
                             );

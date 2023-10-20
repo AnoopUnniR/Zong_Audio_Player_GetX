@@ -16,6 +16,7 @@ class PlayListPageController extends GetxController {
     final playListDb = await Hive.openBox<PlayListModel>(playlistBox);
     // playListDb.clear();
     playListTitle.assignAll(playListDb.values);
+   
     update();
   }
 

@@ -62,7 +62,7 @@ menuIcon({
                           ),
                           onPressed: () {
                             songController.updateFavourites(song.id!);
-                            Get.back();
+                           Navigator.pop(context);
                           },
                         );
                       } else {
@@ -75,7 +75,7 @@ menuIcon({
                           ),
                           onPressed: () {
                             songController.updateFavourites(song.id!);
-                            Get.back();
+                            Navigator.pop(context);
                           },
                         );
                       }
@@ -84,7 +84,7 @@ menuIcon({
                 ),
               ),
               isPlaylist ==false?
-              addToPlaylistbutton(song.id!):removefromPlaylist(song.id!,playlistId!)
+              addToPlaylistbutton(song.id!,context):removefromPlaylist(song.id!,playlistId!,context)
               ,
               Padding(
                 padding: const EdgeInsets.only(

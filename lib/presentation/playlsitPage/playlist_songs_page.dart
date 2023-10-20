@@ -7,6 +7,7 @@ import 'package:music_app_getx/controller/playlist_songs_list_controller.dart';
 import 'package:music_app_getx/functions/music_get_func.dart';
 import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
+import 'package:music_app_getx/presentation/playlsitPage/add_songs_playlist.dart';
 import 'package:music_app_getx/presentation/widgets/menu_icon_home.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -86,14 +87,15 @@ class PlaylistSongsScreen extends StatelessWidget {
                               //listing songs//------------------------------------------------
                               child: ListTile(
                                   onTap: () async {
-                                    await currentPlaying.currentSongUpdate(id);
-                                    await await musicFucntion
-                                        .creatingPlayerList(collection);
-                                    await musicFucntion.playingAudio(index);
                                     Get.to(() => MusicPlayerScreen(
                                           index: index,
                                           songsIds: songs,
                                         ));
+                                    await currentPlaying.currentSongUpdate(id);
+                                    await musicFucntion
+                                        .creatingPlayerList(collection);
+                                    await musicFucntion.playingAudio(index);
+                                    
                                   },
                                   title: Text(
                                     title,
@@ -132,18 +134,18 @@ class PlaylistSongsScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const Align(
+             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     // Get.to(() => MusicPlayerScreen(index: index));
-                    //   },
-                    //   child: const Text('Add Songs'),
-                    // ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => AddSongsPlaylistScreen(playlistId: playlist.id!,));
+                      },
+                      child: const Text('Add Songs'),
+                    ),
                     // MiniPlayerClass(
                     //     currentSongTitles: currentSongTitle ?? '',
                     //     width: width),

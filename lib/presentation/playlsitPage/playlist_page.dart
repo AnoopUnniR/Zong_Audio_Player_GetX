@@ -10,7 +10,6 @@ class PlayListPage extends StatelessWidget {
   PlayListPage({super.key});
 
   final _playlistController = Get.put(PlayListPageController());
-
   final playlistNameController = TextEditingController();
 
   @override
@@ -56,7 +55,6 @@ class PlayListPage extends StatelessWidget {
                           ),
                         );
                       }
-                      
                       return Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: GridView.builder(
@@ -139,11 +137,12 @@ class PlayListPage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                onTap: () => Get.to(() => PlaylistSongsScreen(
-                                      playlist: controller.playListTitle[index],
-                                    ),
-                                  )
-                                );
+                                onTap: () => Get.to(
+                                      () => PlaylistSongsScreen(
+                                        playlist:
+                                            controller.playListTitle[index],
+                                      ),
+                                    ));
                           },
                         ),
                       );

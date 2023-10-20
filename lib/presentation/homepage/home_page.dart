@@ -250,6 +250,10 @@ class HomePage extends StatelessWidget {
                               //listing songs//------------------------------------------------
                               child: ListTile(
                                 onTap: () async {
+                                  Get.to(() => MusicPlayerScreen(
+                                        index: id,
+                                        songsIds: songs,
+                                      ));
                                   await currentPlayinSongController
                                       .currentSongUpdate(id);
                                   await musicFucntion.creatingPlayerList(songs);

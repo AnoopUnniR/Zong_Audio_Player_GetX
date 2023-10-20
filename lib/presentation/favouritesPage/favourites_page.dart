@@ -79,10 +79,10 @@ class FavoritesScreen extends StatelessWidget {
                             contentPadding:
                                 const EdgeInsets.symmetric(horizontal: 10),
                             onTap: () async {
+                              Get.to(() => MusicPlayerScreen(index: id,songsIds: song,));
                               await currentSong.currentSongUpdate(id);
                               await musicFucntion.creatingPlayerList(song);
                               await musicFucntion.playingAudio(index);
-                              Get.to(() => MusicPlayerScreen(index: id,songsIds: song,));
 
                             },
                             title: Text(

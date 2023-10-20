@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:music_app_getx/constands/constand.dart';
@@ -27,7 +28,6 @@ class MusicFunctionsClass with AllSongsFunctClass {
     }
   }
 
-
   List songid = [];
   creatingPlayerList(List songsIdList) async {
     // songid.clear();
@@ -36,9 +36,8 @@ class MusicFunctionsClass with AllSongsFunctClass {
     for (var element in songsIdList) {
       final val = songsDb.get(element);
       if (val == null) {
-        print('value null');
+        debugPrint("value null");
       } else {
-        print(val.songTitle);
         songs.add(val.songuri);
         songid.add(val.id);
       }

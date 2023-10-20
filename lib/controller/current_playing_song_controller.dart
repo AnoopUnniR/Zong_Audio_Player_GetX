@@ -12,7 +12,6 @@ class CurrentPlayingSongController extends GetxController {
   final mostPlayedController = Get.put(MostPlayedController());
   // final mostPlayedController = Get.find<MostPlayedController>();
 
-
   currentSongUpdate(int id) {
     if (id != songList.songsList.length && id != -1) {
       currentPlayingSong = songList.songsList[id];

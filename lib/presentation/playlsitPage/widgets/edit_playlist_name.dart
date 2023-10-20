@@ -5,8 +5,7 @@ import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/widgets/snackbar_widget.dart';
 
 editingPlaylist(PlayListModel playlist) {
-  print(playlist.playlistName);
-  print(playlist.id);
+ 
   final playlistController = Get.find<PlayListPageController>();
   TextEditingController updateController = TextEditingController();
   updateController.text = playlist.playlistName;

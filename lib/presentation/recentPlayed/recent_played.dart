@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/controller/all_songs_controller.dart';
+import 'package:music_app_getx/controller/current_playing_song_controller.dart';
 import 'package:music_app_getx/controller/recent_played_controller.dart';
 import 'package:music_app_getx/functions/music_get_func.dart';
 import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
@@ -13,6 +14,7 @@ class RecentPlayedScreen extends StatelessWidget {
   final allSongsController = Get.find<AllSongsController>();
   final recentSongsController = Get.find<RecentPlayedController>();
   final musicFunction = MusicFunctionsClass();
+  final currentplayingController = Get.find<CurrentPlayingSongController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +41,6 @@ class RecentPlayedScreen extends StatelessWidget {
                   children: [
                     GetBuilder<RecentPlayedController>(
                       builder: (recentController) {
-                        print(recentController.recentPlayed);
                         if (recentController.recentPlayed.isEmpty) {
                           // print('emoty');
                           return SizedBox(
@@ -55,7 +56,7 @@ class RecentPlayedScreen extends StatelessWidget {
                         List songsInRecent = [
                           ...recentController.recentPlayed.reversed
                         ];
-                        songsInRecent.addAll(recentController.recentPlayed);
+                        // songsInRecent.addAll(recentController.recentPlayed);
                         return GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -71,7 +72,7 @@ class RecentPlayedScreen extends StatelessWidget {
                             // var artist = allSongsController.songsList[songsInRecent[index].recentPlayedSongId].songArtist!;
                             var image = allSongsController
                                 .songsList[songsInRecent[index]].imageId;
-                            // var id = allSongsController.songsList[songsInRecent[index].recentPlayedSongId].id;
+                            var id = allSongsController.songsList[songsInRecent[index]].id;
                             return InkWell(
                               child: Card(
                                 color: Colors.white,
@@ -80,7 +81,7 @@ class RecentPlayedScreen extends StatelessWidget {
                                     Align(
                                       alignment: Alignment.topRight,
                                       child: menuIcon(
-                                          id: index, isPlaylist: false),
+                                          id: id, isPlaylist: false),
                                     ),
                                     Align(
                                       alignment: Alignment.topCenter,
@@ -109,10 +110,15 @@ class RecentPlayedScreen extends StatelessWidget {
                                 ),
                               ),
                               onTap: () async {
+                                await currentplayingController
+                                    .currentSongUpdate(songsInRecent[index]);
                                 await musicFunction
                                     .creatingPlayerList(songsInRecent);
                                 musicFunction.playingAudio(index);
-                                Get.to(() => MusicPlayerScreen(index: index,songsIds: songsInRecent,));
+                                Get.to(() => MusicPlayerScreen(
+                                      index: index,
+                                      songsIds: songsInRecent,
+                                    ));
                               },
                             );
                           },

@@ -35,7 +35,6 @@ class RecentPlayedModel {
   int? id;
   @HiveField(1)
   int? recentPlayedSongId;
-
   RecentPlayedModel({this.id, required this.recentPlayedSongId});
 }
 

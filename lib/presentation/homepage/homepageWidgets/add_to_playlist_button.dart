@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:music_app_getx/presentation/homepage/homepageWidgets/playlist_add_dialogue.dart';
 
-addToPlaylistbutton(int id) {
+addToPlaylistbutton(int id, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 18.0, right: 18, top: 8),
     child: SizedBox(
@@ -13,7 +12,7 @@ addToPlaylistbutton(int id) {
           backgroundColor: const Color(0xff121526),
         ),
         onPressed: () {
-          Get.back();
+          Navigator.pop(context);
           playlistDialogue(id);
         },
         child: const Text(

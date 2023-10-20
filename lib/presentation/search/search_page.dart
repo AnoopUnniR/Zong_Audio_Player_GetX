@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_app_getx/controller/all_songs_controller.dart';
+import 'package:music_app_getx/controller/current_playing_song_controller.dart';
+import 'package:music_app_getx/controller/mini_player_controller.dart';
+import 'package:music_app_getx/functions/music_get_func.dart';
+import 'package:music_app_getx/presentation/miniPlayer/mini_player.dart';
 import 'package:music_app_getx/presentation/widgets/menu_icon_home.dart';
-import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class SearchPage extends StatefulWidget {
@@ -12,6 +15,9 @@ class SearchPage extends StatefulWidget {
 }
 
 class SearchPageState extends State<SearchPage> {
+  final musicFunciton = MusicFunctionsClass();
+  final currentMusicController = Get.find<CurrentPlayingSongController>();
+  final miniPlayer = Get.find<MiniPlayerController>();
   String search = '';
   @override
   Widget build(BuildContext context) {
@@ -95,23 +101,12 @@ class SearchPageState extends State<SearchPage> {
                         onTap: () async {
                           int searchResultId = controller.songsList.indexWhere(
                               (element) => element.id == findList[index].id);
-                          Get.to(() => MusicPlayerScreen(index: searchResultId,songsIds: [],));
-                          // _musicFunction.playingAudio(searchResultId);
-                          // Navigator.pushReplacement(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => MusicPlayerScreen(
-                          //       pathAudio: path,
-                          //       index: index,
-                          //       artist: artist,
-                          //       title: title,
-                          //       imageId: image,
-                          //       id: id!,
-                          //       songPath: const [],
-                          //       songDetails: const [],
-                          //     ),
-                          //   ),
-                          // );
+                          await currentMusicController
+                              .currentSongUpdate(searchResultId);
+                          await musicFunciton
+                              .creatingPlayerList([searchResultId]);
+                          await musicFunciton.playingAudio(0);
+                          miniPlayer.isMiniPlayerVisible.value = true;
                         },
                         title: Text(
                           title,
@@ -132,12 +127,16 @@ class SearchPageState extends State<SearchPage> {
                             'assets/0.png',
                           ),
                         ),
-                        trailing: menuIcon(id: id,isPlaylist: false),
+                        trailing: menuIcon(id: id, isPlaylist: false),
                       ),
                     );
                   },
                 );
               },
+            ),
+            const Align(
+              alignment: AlignmentDirectional.bottomEnd,
+              child: MiniPlayerClass(),
             ),
           ],
         ),

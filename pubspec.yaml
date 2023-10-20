@@ -50,8 +50,6 @@ dependencies:
   restart_app: ^1.1.2
   flutter_native_splash: ^2.2.19
   change_app_package_name: ^1.1.0
-  permission_handler: ^10.2.0
-  device_info_plus: ^8.1.0
   get: ^4.6.5
 
 

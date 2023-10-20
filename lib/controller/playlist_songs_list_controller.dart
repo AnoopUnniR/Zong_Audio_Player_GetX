@@ -26,7 +26,7 @@ class PlaylistSongsController extends GetxController {
         val.songsInPlaylist!.add(id);
         playlistSongsDb.put(id, val);
         getPlaylistSongs(playlistId);
-        Get.back();
+        // Get.back()
         snackBarWidget(
             message: 'Added to playlist ${val.playlistName}', title: "Added");
       } else {
@@ -43,5 +43,6 @@ class PlaylistSongsController extends GetxController {
     final val = playlistSongsDb.get(playlistId);
     val!.songsInPlaylist!.remove(id);
     getPlaylistSongs(playlistId);
+    snackBarWidget(message: 'Removed from playlist ${val.playlistName}', title: 'Removed');
   }
 }

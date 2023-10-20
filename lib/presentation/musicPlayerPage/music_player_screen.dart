@@ -12,12 +12,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
+// ignore: must_be_immutable
 class MusicPlayerScreen extends StatelessWidget {
-  MusicPlayerScreen({super.key, required this.index,required this.songsIds});
+  MusicPlayerScreen({super.key, required this.index, required this.songsIds});
   final int index;
   final List songsIds;
 
-  Stream<DurationState> get _durationStateStream =>
+   Stream<DurationState> get _durationStateStream =>
       dartrx.Rx.combineLatest2<Duration, Duration?, DurationState>(
           player.positionStream,
           player.durationStream,
@@ -182,11 +183,12 @@ class MusicPlayerScreen extends StatelessWidget {
                           children: [
                             IconButton(
                               onPressed: () {
-                                if(indexVal>=0){
-                                  currentSongController.currentSongUpdate(songsIds[indexVal--]);
-                                musicFunction.playingAudio(indexVal--);
+                                if (indexVal >= 0) {
+                                  currentSongController
+                                      .currentSongUpdate(songsIds[indexVal--]);
+                                  // musicFunction.playingAudio(indexVal--);
+                                  player.seekToPrevious();
                                 }
-                                
                               },
                               icon: Icon(
                                 Icons.skip_previous_outlined,
@@ -226,12 +228,12 @@ class MusicPlayerScreen extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () {
-            
-                                if(indexVal<songsIds.length){
-                                  currentSongController.currentSongUpdate(songsIds[indexVal++]);
-                                musicFunction.playingAudio(indexVal);
+                                if (indexVal < songsIds.length) {
+                                  currentSongController
+                                      .currentSongUpdate(songsIds[indexVal++]);
+                                  // musicFunction.playingAudio(indexVal);\
+                                  player.seekToNext();
                                 }
-                                
                               },
                               icon: Icon(
                                 Icons.skip_next_outlined,

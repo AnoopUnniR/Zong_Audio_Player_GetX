@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:music_app_getx/constands/constand.dart';
@@ -21,7 +22,7 @@ class MostPlayedController extends GetxController {
       song.mostplayedCount = song.mostplayedCount + 1;
       songDb.put(song.id, song);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
 
     getAllRecebtPlayed();
