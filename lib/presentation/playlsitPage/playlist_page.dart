@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/controller/playlist_page_controller.dart';
-import 'package:music_app_getx/controller/playlist_songs_list_controller.dart';
-import 'package:music_app_getx/presentation/playlsitPage/playlist_songs_page.dart';
 import 'package:music_app_getx/presentation/playlsitPage/widgets/add_playlist_dialogue_box.dart';
-import 'package:music_app_getx/presentation/playlsitPage/widgets/edit_playlist_name.dart';
 import 'package:music_app_getx/presentation/widgets/custom_appbar.dart';
-import 'package:text_scroll/text_scroll.dart';
 
 import 'widgets/playlist_tiles_widget.dart';
 
