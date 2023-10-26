@@ -10,7 +10,7 @@ class SplashScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     displayHeight = MediaQuery.of(context).size.height;
-    displayWight = MediaQuery.of(context).size.width / 100;
+    displayWidth = MediaQuery.of(context).size.width / 100;
   
     return Scaffold(
       backgroundColor: const Color(0xff121526),

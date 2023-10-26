@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/controller/playlist_page_controller.dart';
 import 'package:music_app_getx/controller/playlist_songs_list_controller.dart';
 import 'package:music_app_getx/presentation/playlsitPage/playlist_page.dart';
@@ -25,9 +26,12 @@ playlistDialogue(int id) {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'No Playlists created.',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                     const Material(
+                        color: Colors.transparent,
+                        child:  Text(
+                          "No Playlist Created",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -41,16 +45,15 @@ playlistDialogue(int id) {
                             Get.back();
                             Get.to(() => PlayListPage());
                           },
-                          child: const Text('Go to Playlist Page'))
+                          child: const Text(
+                            'Go to Playlist Page',
+                            style: whiteText,
+                          ))
                     ],
                   ),
                 );
               }
-              // for (var song in controller.playlistList) {
-              //   playListName.add(song.playlistName!);
-              //   playlistSongDetails.add(song);
-              //   playListIds.add(song.playListId);
-              // }
+              
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Stack(
@@ -66,8 +69,10 @@ playlistDialogue(int id) {
                             itemCount: playlistController.playListTitle.length,
                             itemBuilder: (context, index) {
                               return ElevatedButton(
-                                style:  ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 119, 109, 234),),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 119, 109, 234),
+                                ),
                                 child: Text(
                                   playlistController
                                       .playListTitle[index].playlistName,
@@ -76,7 +81,7 @@ playlistDialogue(int id) {
                                   playlistSongController.addToPlaylist(
                                       id,
                                       playlistController
-                                          .playListTitle[index].id);
+                                          .playListTitle[index].id!);
                                 },
                               );
                             },

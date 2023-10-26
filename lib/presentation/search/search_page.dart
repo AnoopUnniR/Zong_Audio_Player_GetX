@@ -4,6 +4,7 @@ import 'package:music_app_getx/controller/all_songs_controller.dart';
 import 'package:music_app_getx/controller/current_playing_song_controller.dart';
 import 'package:music_app_getx/controller/mini_player_controller.dart';
 import 'package:music_app_getx/functions/music_get_func.dart';
+import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/miniPlayer/mini_player.dart';
 import 'package:music_app_getx/presentation/widgets/menu_icon_home.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -101,10 +102,12 @@ class SearchPageState extends State<SearchPage> {
                         onTap: () async {
                           int searchResultId = controller.songsList.indexWhere(
                               (element) => element.id == findList[index].id);
+                          SongsListModel song =
+                              controller.songsList[searchResultId];
                           await currentMusicController
-                              .currentSongUpdate(searchResultId);
-                          await musicFunciton
-                              .creatingPlayerList([searchResultId]);
+                              .currentSongUpdate(song.id!);
+                          await musicFunciton.creatingPlayerList(
+                              [song]);
                           await musicFunciton.playingAudio(0);
                           miniPlayer.isMiniPlayerVisible.value = true;
                         },

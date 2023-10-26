@@ -5,6 +5,5 @@ class MiniPlayerController extends GetxController {
 
   miniPlayerVisible(bool isMiniPlayerVisible) {
     this.isMiniPlayerVisible.value = isMiniPlayerVisible;
-   
   }
 }

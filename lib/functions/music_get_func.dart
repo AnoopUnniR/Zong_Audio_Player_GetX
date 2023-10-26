@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/controller/current_playing_song_controller.dart';
 import 'package:music_app_getx/functions/songs_hive.dart';
@@ -28,26 +26,12 @@ class MusicFunctionsClass with AllSongsFunctClass {
     }
   }
 
-  List songid = [];
-  creatingPlayerList(List songsIdList) async {
-    // songid.clear();
-    List songs = [];
-    final songsDb = await Hive.openBox<SongsListModel>(allSongsDbName);
-    for (var element in songsIdList) {
-      final val = songsDb.get(element);
-      if (val == null) {
-        debugPrint("value null");
-      } else {
-        songs.add(val.songuri);
-        songid.add(val.id);
-      }
-    }
-
+  creatingPlayerList(List<SongsListModel> songsList) async {
     List<AudioSource> sources = [];
-    for (var song in songs) {
+    for (var song in songsList) {
       sources.add(
         AudioSource.uri(
-          Uri.parse(song),
+          Uri.parse(song.songuri),
         ),
       );
     }

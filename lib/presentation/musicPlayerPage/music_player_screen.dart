@@ -8,17 +8,19 @@ import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/homepage/homepageWidgets/playlist_add_dialogue.dart';
 import 'package:rxdart/rxdart.dart' as dartrx;
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
+import 'widgets/favorites_button_widget.dart';
+import 'widgets/player_button_widget.dart';
+
 // ignore: must_be_immutable
 class MusicPlayerScreen extends StatelessWidget {
-  MusicPlayerScreen({super.key, required this.index, required this.songsIds});
-  final int index;
-  final List songsIds;
+  MusicPlayerScreen({super.key, required this.index, required this.songs});
 
-   Stream<DurationState> get _durationStateStream =>
+  final int index;
+  final List<SongsListModel> songs;
+  Stream<DurationState> get _durationStateStream =>
       dartrx.Rx.combineLatest2<Duration, Duration?, DurationState>(
           player.positionStream,
           player.durationStream,
@@ -48,14 +50,12 @@ class MusicPlayerScreen extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(),
+                  const SizedBox(height: 40),
+                  SizedBox(
                     height: width * 75,
+                    width: width * 75,
                     child: QueryArtworkWidget(
-                      id: song.id!,
+                      id: song.imageId!,
                       type: ArtworkType.AUDIO,
                       artworkFit: BoxFit.cover,
                       nullArtworkWidget: Image.asset(
@@ -72,6 +72,7 @@ class MusicPlayerScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          //Playlist button-------------------
                           IconButton(
                             onPressed: () {
                               playlistDialogue(index);
@@ -81,35 +82,11 @@ class MusicPlayerScreen extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                          GetBuilder<AllSongsController>(
-                            builder: (controller) {
-                              return controller
-                                          .songsList[currentSongController
-                                              .currentPlayingSong!.id!]
-                                          .isfav ==
-                                      false
-                                  ? IconButton(
-                                      onPressed: () {
-                                        songListController
-                                            .updateFavourites(song.id!);
-                                      },
-                                      icon: const Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : IconButton(
-                                      onPressed: () {
-                                        songListController
-                                            .updateFavourites(song.id!);
-                                      },
-                                      icon: const Icon(
-                                        Icons.favorite,
-                                        color: Colors.white,
-                                      ),
-                                    );
-                            },
-                          )
+                          //Favorites button-----------------
+                          FavoritesButtonWidget(
+                              currentSongController: currentSongController,
+                              songListController: songListController,
+                              song: song)
                         ],
                       ),
                     ),
@@ -134,18 +111,14 @@ class MusicPlayerScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        const SizedBox(height: 10),
                         Text(
                           song.songArtist ?? '<unknown>',
                           style: TextStyle(
                               color: iconColor,
                               overflow: TextOverflow.ellipsis),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         Container(
                           margin: const EdgeInsets.all(10),
                           //slider bar duration state stream
@@ -175,18 +148,17 @@ class MusicPlayerScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             IconButton(
                               onPressed: () {
-                                if (indexVal >= 0) {
+                                if (indexVal > 0) {
+                                  int intex = songs.indexWhere(
+                                      (element) => element.id == song.id);
                                   currentSongController
-                                      .currentSongUpdate(songsIds[indexVal--]);
-                                  // musicFunction.playingAudio(indexVal--);
+                                      .currentSongUpdate(songs[intex - 1].id!);
                                   player.seekToPrevious();
                                 }
                               },
@@ -196,42 +168,14 @@ class MusicPlayerScreen extends StatelessWidget {
                                 color: iconColor,
                               ),
                             ),
-                            StreamBuilder<PlayerState>(
-                              stream: player.playerStateStream,
-                              builder: (context, snapshot) {
-                                final playerState = snapshot.data;
-                                final playing = playerState?.playing;
-                                if (playing != true) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(0),
-                                    child: IconButton(
-                                      icon: const Icon(
-                                        Icons.play_arrow,
-                                        color: Colors.white,
-                                      ),
-                                      iconSize: 60.0,
-                                      onPressed: player.play,
-                                    ),
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(0),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.pause,
-                                          color: Colors.white),
-                                      iconSize: 60.0,
-                                      onPressed: player.pause,
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
+                            const PlayerButtonWidget(),
                             IconButton(
                               onPressed: () {
-                                if (indexVal < songsIds.length) {
+                                if (indexVal < songs.length) {
+                                  int intex = songs.indexWhere(
+                                      (element) => element.id == song.id);
                                   currentSongController
-                                      .currentSongUpdate(songsIds[indexVal++]);
-                                  // musicFunction.playingAudio(indexVal);\
+                                      .currentSongUpdate(songs[intex + 1].id!);
                                   player.seekToNext();
                                 }
                               },

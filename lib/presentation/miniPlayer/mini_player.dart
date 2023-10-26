@@ -7,39 +7,16 @@ import 'package:music_app_getx/controller/mini_player_controller.dart';
 import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-class MiniPlayerClass extends StatefulWidget {
+class MiniPlayerClass extends StatelessWidget {
   const MiniPlayerClass({
     super.key,
   });
 
   @override
-  State<MiniPlayerClass> createState() => _MiniPlayerClassState();
-}
-
-class _MiniPlayerClassState extends State<MiniPlayerClass> {
-  var miniPlayerController = Get.put(MiniPlayerController());
-  @override
   Widget build(BuildContext context) {
-    // if (player.playing == true || isPlayerOn == true) {
-    //   if (isPlayerOn == true) {
-    //   } else {
-    //     visible = false;
-    //   }
-    // } else {
-    //   visible = false;
-    // }
+    final miniPlayerController = Get.put(MiniPlayerController());
+
     return Obx(() {
-      // if (player.playing == true || isPlayerOn == true) {
-      //   if (isPlayerOn == true) {
-      //     controller.miniPlayerVisible(true);
-      //   } else {
-      //    controller.miniPlayerVisible(false);
-
-      //   }
-      // } else {
-      //                 controller.miniPlayerVisible(false);
-
-      // }
       if (miniPlayerController.isMiniPlayerVisible.value == false) {
         return const SizedBox();
       }
@@ -48,7 +25,7 @@ class _MiniPlayerClassState extends State<MiniPlayerClass> {
         child: Padding(
           padding: const EdgeInsets.only(left: 13.0, right: 13, bottom: 8),
           child: SizedBox(
-            width: displayWight * 100,
+            width: displayWidth * 100,
             child:
                 GetBuilder<CurrentPlayingSongController>(builder: (controller) {
               return Stack(
@@ -60,11 +37,11 @@ class _MiniPlayerClassState extends State<MiniPlayerClass> {
                     onTap: () => Get.to(
                       () => MusicPlayerScreen(
                           index: controller.currentPlayingSong!.id!,
-                          songsIds: controller.songList.songsList),
+                          songs: controller.songList.songsList),
                     ),
                     child: Container(
                       height: 70,
-                      width: displayWight * 100,
+                      width: displayWidth * 100,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
@@ -75,20 +52,17 @@ class _MiniPlayerClassState extends State<MiniPlayerClass> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                            ),
-                            child: SizedBox(
-                              width: displayWight * 45,
-                              child: TextScroll(
-                                controller.currentPlayingSong!.songTitle,
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    color: Color.fromARGB(255, 213, 207, 207)),
-                                delayBefore: const Duration(seconds: 3),
-                                pauseBetween: const Duration(seconds: 2),
-                              ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextScroll(
+                              controller.currentPlayingSong!.songTitle,
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  color: Color.fromARGB(255, 213, 207, 207)),
+                              delayBefore: const Duration(seconds: 3),
+                              pauseBetween: const Duration(seconds: 2),
                             ),
                           ),
                           SizedBox(

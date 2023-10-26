@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/functions/reset_db.dart';
 import 'package:music_app_getx/presentation/settings/pages/about_us.dart';
 import 'package:music_app_getx/presentation/settings/pages/privacy_policy_page.dart';
 import 'package:music_app_getx/presentation/splash_screen.dart';
+import 'package:music_app_getx/presentation/widgets/custom_appbar.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -13,18 +15,7 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xff121526),
-      appBar: AppBar(
-        title: const Text('Settings'),
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-        ),
-        toolbarHeight: 50,
-        backgroundColor: const Color.fromARGB(255, 38, 32, 63),
-      ),
+      appBar:const CustomAppbar(title: "Settings",),
       body: SafeArea(
           child: Column(
         children: [
@@ -116,11 +107,14 @@ class SettingsPage extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             reset.resetAppFunction();
-                            Get.offAll(()=>SplashScreenPage());
+                            Get.offAll(() => SplashScreenPage());
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red),
-                          child: const Text('Yes'),
+                          child: const Text(
+                            'Yes',
+                            style: whiteText,
+                          ),
                         ),
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -129,7 +123,10 @@ class SettingsPage extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('No')),
+                            child: const Text(
+                              'No',
+                              style: whiteText,
+                            )),
                       ]),
                 );
               },

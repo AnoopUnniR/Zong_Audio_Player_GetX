@@ -4,9 +4,12 @@ import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/controller/all_songs_controller.dart';
 import 'package:music_app_getx/controller/current_playing_song_controller.dart';
 import 'package:music_app_getx/functions/music_get_func.dart';
+import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/miniPlayer/mini_player.dart';
 import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+
+import '../widgets/custom_appbar.dart';
 
 class FavoritesScreen extends StatelessWidget {
   FavoritesScreen({super.key});
@@ -19,25 +22,14 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff121526),
-      appBar: AppBar(
-        title: const Text("Favourites"),
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-        ),
-        toolbarHeight: 50,
-        backgroundColor: const Color.fromARGB(255, 38, 32, 63),
-      ),
+      appBar: const CustomAppbar(title: "Favorites"),
       body: SafeArea(
         child: Stack(
           children: [
             SingleChildScrollView(
               child: GetBuilder<AllSongsController>(
                 builder: (songController) {
-                  List favouriteSongs = songController.songsList
+                  List<SongsListModel> favouriteSongs = songController.songsList
                       .where((element) => element.isfav == true)
                       .toList();
                   // print(controller.favouriteSongs.first.songTitle);
@@ -57,18 +49,15 @@ class FavoritesScreen extends StatelessWidget {
                   for (var element in favouriteSongs) {
                     song.add(element.id);
                   }
-                  musicFucntion.creatingPlayerList(song);
+                  musicFucntion.creatingPlayerList(favouriteSongs);
 
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: favouriteSongs.length,
                     itemBuilder: (context, index) {
-                      // var path = favouriteSongs[index].songuri;
-                      var title = favouriteSongs[index].songTitle;
-                      var artist = favouriteSongs[index].songArtist!;
-                      var image = favouriteSongs[index].imageId;
-                      var id = favouriteSongs[index].id;
+                      SongsListModel song = favouriteSongs[index];
+                      int id = favouriteSongs[index].id!;
                       return Padding(
                         padding:
                             const EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -79,26 +68,28 @@ class FavoritesScreen extends StatelessWidget {
                             contentPadding:
                                 const EdgeInsets.symmetric(horizontal: 10),
                             onTap: () async {
-                              Get.to(() => MusicPlayerScreen(index: id,songsIds: song,));
+                              Get.to(() => MusicPlayerScreen(
+                                    index: id,
+                                    songs: favouriteSongs,
+                                  ));
                               await currentSong.currentSongUpdate(id);
-                              await musicFucntion.creatingPlayerList(song);
+                              await musicFucntion.creatingPlayerList(favouriteSongs);
                               await musicFucntion.playingAudio(index);
-
                             },
                             title: Text(
-                              title,
+                              song.songTitle,
                               style: const TextStyle(
                                   color: Color.fromARGB(255, 37, 36, 36),
                                   overflow: TextOverflow.ellipsis),
                             ),
                             subtitle: Text(
-                              artist,
+                              song.songArtist??"unknown",
                               style: const TextStyle(
                                   color: Color.fromARGB(255, 55, 55, 55),
                                   overflow: TextOverflow.ellipsis),
                             ),
                             leading: QueryArtworkWidget(
-                              id: image!,
+                              id: song.imageId!,
                               type: ArtworkType.AUDIO,
                               nullArtworkWidget: Image.asset(
                                 'assets/0.png',
@@ -111,9 +102,6 @@ class FavoritesScreen extends StatelessWidget {
                               tooltip: 'remove',
                               onPressed: () {
                                 songController.updateFavourites(id);
-                                // favouritesController.deleteFavourites(id!);
-                                // deleteFavourite(id!, context, title);
-                                // favouritesDetails.removeAt(index);
                               },
                             ),
                           ),

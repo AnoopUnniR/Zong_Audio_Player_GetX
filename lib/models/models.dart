@@ -44,8 +44,8 @@ class PlayListModel {
   int? id;
   @HiveField(1)
   String playlistName;
-  @HiveField(2)
-  List? songsInPlaylist;
+  @HiveField(2,defaultValue: [])
+  List songsInPlaylist;
 
-  PlayListModel({required this.playlistName,this.songsInPlaylist=const[]});
+  PlayListModel({required this.playlistName,required this.songsInPlaylist});
 }

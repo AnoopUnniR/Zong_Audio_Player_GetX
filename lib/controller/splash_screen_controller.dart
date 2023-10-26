@@ -9,6 +9,7 @@ class SplashScreenController extends GetxController {
     super.onInit();
     await musicGet.songList();
     await loadDataAndNavigate();
+    navigateToHomeScreen();
   }
 
   void navigateToHomeScreen() {

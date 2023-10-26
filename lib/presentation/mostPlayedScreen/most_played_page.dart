@@ -4,35 +4,24 @@ import 'package:music_app_getx/controller/all_songs_controller.dart';
 import 'package:music_app_getx/controller/current_playing_song_controller.dart';
 import 'package:music_app_getx/controller/most_played_songs.dart';
 import 'package:music_app_getx/functions/music_get_func.dart';
+import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
+import 'package:music_app_getx/presentation/widgets/custom_appbar.dart';
 import 'package:music_app_getx/presentation/widgets/menu_icon_home.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class MostPlayedPage extends StatelessWidget {
   MostPlayedPage({super.key});
-  final allSongs = Get.find<AllSongsController>();
+  final allSongsController = Get.find<AllSongsController>();
   final musicFucntion = MusicFunctionsClass();
   final currentplayingController = Get.find<CurrentPlayingSongController>();
-
-  // final mostPlayedController = Get.find<MostPlayedController>();
-  // final mostPlayedController = Get.put(MostPlayedController());
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: const Color(0xff121526),
-      appBar: AppBar(
-          title: const Text("Most Played"),
-          centerTitle: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          toolbarHeight: 50,
-          backgroundColor: const Color.fromARGB(255, 38, 32, 63)),
+      appBar: const CustomAppbar(title: "Most Played"),
       body: Padding(
         padding: const EdgeInsets.all(40.0),
         child: SafeArea(
@@ -54,11 +43,7 @@ class MostPlayedPage extends StatelessWidget {
                             ),
                           );
                         }
-                        List songs = [];
-
-                        // mostPlayedDetails.clear();
-                        songs.addAll(mostPlayedController.mostPlayed);
-                        (songs);
+                        List<SongsListModel> mostPlayedSongs = [];
                         return GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -68,22 +53,19 @@ class MostPlayedPage extends StatelessWidget {
                                   crossAxisSpacing: 30,
                                   mainAxisSpacing: 30),
                           itemBuilder: (context, index) {
-                            int songIndex =
-                                mostPlayedController.mostPlayed[index];
-                            var title = allSongs.songsList[songIndex].songTitle;
-                            allSongs.songsList[songIndex].songArtist!;
-                            var id = allSongs.songsList[songIndex].id;
+                            int songIndex = allSongsController.songsList
+                                .indexWhere((element) =>
+                                    element.id ==
+                                    mostPlayedController.mostPlayed[index]);
+                            mostPlayedSongs
+                                .add(allSongsController.songsList[songIndex]);
+                            SongsListModel song = mostPlayedSongs[index];
+                            int id = song.id!;
                             return InkWell(
                               child: Card(
                                 color: Colors.white,
                                 child: Stack(
                                   children: [
-                                    // Align(
-                                    //   alignment: Alignment.topLeft,
-                                    //   child: Text(allSongs
-                                    //       .songsList[songIndex].mostplayedCount
-                                    //       .toString()),
-                                    // ),
                                     Align(
                                       alignment: Alignment.topRight,
                                       child:
@@ -91,15 +73,19 @@ class MostPlayedPage extends StatelessWidget {
                                     ),
                                     Align(
                                       alignment: Alignment.topCenter,
-                                      child: QueryArtworkWidget(
-                                        artworkHeight: 100,
-                                        artworkWidth: 100,
-                                        id: id,
-                                        type: ArtworkType.AUDIO,
-                                        nullArtworkWidget: Image.asset(
-                                          height: 100,
-                                          width: 60,
-                                          'assets/icon.png',
+                                      child: SizedBox(
+                                        height: 80,
+                                        width: 80,
+                                        child: QueryArtworkWidget(
+                                          artworkHeight: 100,
+                                          artworkWidth: 100,
+                                          id: song.imageId!,
+                                          type: ArtworkType.AUDIO,
+                                          nullArtworkWidget: Image.asset(
+                                            height: 100,
+                                            width: 60,
+                                            'assets/icon.png',
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -107,7 +93,7 @@ class MostPlayedPage extends StatelessWidget {
                                       alignment: Alignment.bottomCenter,
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
-                                        child: Text(title,
+                                        child: Text(song.songTitle,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis),
                                       ),
@@ -119,13 +105,11 @@ class MostPlayedPage extends StatelessWidget {
                                 currentplayingController.currentSongUpdate(id);
                                 Get.to(() => MusicPlayerScreen(
                                       index: index,
-                                      songsIds: mostPlayedController.mostPlayed,
+                                      songs: mostPlayedSongs,
                                     ));
-                                await musicFucntion.creatingPlayerList(
-                                    mostPlayedController.mostPlayed);
+                                await musicFucntion
+                                    .creatingPlayerList(mostPlayedSongs);
                                 await musicFucntion.playingAudio(index);
-                                // await musicFucntion.playingAudio(index);
-                                // musicFunction.update(mostPlayedList,index);
                               },
                             );
                           },

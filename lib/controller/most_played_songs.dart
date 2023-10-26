@@ -33,7 +33,7 @@ class MostPlayedController extends GetxController {
     final songDb = await Hive.openBox<SongsListModel>(allSongsDbName);
     List mostPlayedSongs = songDb.values.toList()
       ..sort((a, b) => b.mostplayedCount.compareTo(a.mostplayedCount));
-    List values = [...mostPlayedSongs.take(8).toList()];
+    List values = [...mostPlayedSongs.take(8)];
 
     List most = [];
     for (var element in values) {

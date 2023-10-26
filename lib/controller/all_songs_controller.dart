@@ -5,7 +5,7 @@ import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/widgets/snackbar_widget.dart';
 
 class AllSongsController extends GetxController {
-  List songsList = [];
+  List<SongsListModel> songsList = [];
 
   @override
   onInit() {

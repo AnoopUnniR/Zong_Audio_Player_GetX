@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/controller/playlist_page_controller.dart';
 import 'package:music_app_getx/presentation/widgets/snackbar_widget.dart';
 
@@ -42,18 +43,17 @@ addPlaylistDialog(
       ),
       actions: [
         ElevatedButton(
-          onPressed: () {
-            if (checkName.contains(playlistNameController.text)) {
+          onPressed: () async{
+            if (playlistNameController.text.trim().isEmpty) {
+              snackBarWidget(message: "Please enter a name", title: '');
+            } else if (checkName.contains(playlistNameController.text)) {
+              
               snackBarWidget(
                   message:
                       'playlist with name "${playlistNameController.text}" already exists',
                   title: 'Exists');
-            } else if (playlistNameController.text.trim().isEmpty) {
-              Get.showSnackbar(const GetSnackBar(
-                title: 'Please enter a name',
-              ));
-            } else {
-              playlistController
+            } else  {
+             playlistController
                   .addPlaylist(playlistNameController.text.trim());
               playlistNameController.clear();
               Get.back();
@@ -62,7 +62,10 @@ addPlaylistDialog(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xff8177ea),
           ),
-          child: const Text('create'),
+          child: const Text(
+            'create',
+            style: whiteText,
+          ),
         ),
         ElevatedButton(
           onPressed: () {
@@ -74,6 +77,7 @@ addPlaylistDialog(
           ),
           child: const Text(
             'cancel',
+            style: whiteText,
           ),
         ),
       ],

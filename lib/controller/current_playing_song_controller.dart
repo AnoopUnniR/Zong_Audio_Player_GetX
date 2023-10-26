@@ -14,7 +14,7 @@ class CurrentPlayingSongController extends GetxController {
 
   currentSongUpdate(int id) {
     if (id != songList.songsList.length && id != -1) {
-      currentPlayingSong = songList.songsList[id];
+      currentPlayingSong = songList.songsList.where((element) => element.id! == id).first;
     }
     recentSong.addToRecent(id);
     mostPlayedController.addToMostplayed(id);

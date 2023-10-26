@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/controller/playlist_page_controller.dart';
+import 'package:music_app_getx/controller/playlist_songs_list_controller.dart';
 import 'package:music_app_getx/presentation/playlsitPage/playlist_songs_page.dart';
 import 'package:music_app_getx/presentation/playlsitPage/widgets/add_playlist_dialogue_box.dart';
 import 'package:music_app_getx/presentation/playlsitPage/widgets/edit_playlist_name.dart';
+import 'package:music_app_getx/presentation/widgets/custom_appbar.dart';
 import 'package:text_scroll/text_scroll.dart';
+
+import 'widgets/playlist_tiles_widget.dart';
 
 class PlayListPage extends StatelessWidget {
   PlayListPage({super.key});
@@ -17,17 +22,7 @@ class PlayListPage extends StatelessWidget {
     double width = MediaQuery.of(context).size.width / 100;
     return Scaffold(
       backgroundColor: const Color(0xff121526),
-      appBar: AppBar(
-          title: const Text("PLAYLISTS"),
-          centerTitle: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          toolbarHeight: 50,
-          backgroundColor: const Color.fromARGB(255, 38, 32, 63)),
+      appBar: const CustomAppbar(title: "Playlist"),
       body: SafeArea(
         child: Stack(
           children: [
@@ -35,15 +30,6 @@ class PlayListPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 //create new playlist button
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromARGB(255, 119, 109, 234)),
-                  onPressed: () {
-                    addPlaylistDialog(_playlistController);
-                  },
-                  child: const Text('create new'),
-                ),
                 Expanded(
                   child: GetBuilder<PlayListPageController>(
                     builder: (controller) {
@@ -67,95 +53,30 @@ class PlayListPage extends StatelessWidget {
                                   mainAxisSpacing: 16),
                           itemBuilder: (context, index) {
                             // int id =controller.playListTitle.;
-                            return InkWell(
-                                child: Card(
-                                  color: const Color(0xff8177ea),
-                                  child: Stack(
-                                    children: [
-                                      Align(
-                                          alignment: Alignment.topCenter,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              IconButton(
-                                                  onPressed: () {
-                                                    editingPlaylist(controller
-                                                        .playListTitle[index]);
-                                                  },
-                                                  icon: const Icon(Icons.edit)),
-                                              IconButton(
-                                                icon: const Icon(
-                                                    Icons.delete_forever),
-                                                onPressed: () {
-                                                  Get.dialog(
-                                                    AlertDialog(
-                                                      title: Text(
-                                                          'Do you want to delete the playlist ${controller.playListTitle[index].playlistName}?'),
-                                                      actions: [
-                                                        ElevatedButton(
-                                                          onPressed: () {
-                                                            controller.deletePlaylist(
-                                                                controller
-                                                                    .playListTitle[
-                                                                        index]
-                                                                    .id);
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: const Text(
-                                                              'Delete'),
-                                                        ),
-                                                        ElevatedButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: const Text(
-                                                              "Cancel"),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          )),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: TextScroll(
-                                            controller.playListTitle[index]
-                                                .playlistName,
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                onTap: () => Get.to(
-                                      () => PlaylistSongsScreen(
-                                        playlist:
-                                            controller.playListTitle[index],
-                                      ),
-                                    ));
+                            return PlaylistTilesWidget(
+                              controller: controller,
+                              index: index,
+                            );
                           },
                         ),
                       );
                     },
                   ),
                 ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color.fromARGB(255, 119, 109, 234)),
+                  onPressed: () {
+                    addPlaylistDialog(_playlistController);
+                  },
+                  child: const Text(
+                    'create new',
+                    style: whiteText,
+                  ),
+                ),
               ],
             ),
-            // Align(
-            //   alignment: AlignmentDirectional.bottomEnd,
-            //   child: MiniPlayerClass(
-            //       currentSongTitles: currentSongTitle ?? '', width: width),
-            // ),
           ],
         ),
       ),

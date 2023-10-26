@@ -107,7 +107,8 @@ class PlayListModelAdapter extends TypeAdapter<PlayListModel> {
     };
     return PlayListModel(
       playlistName: fields[1] as String,
-      songsInPlaylist: (fields[2] as List?)?.cast<dynamic>(),
+      songsInPlaylist:
+          fields[2] == null ? [] : (fields[2] as List).cast<dynamic>(),
     )..id = fields[0] as int?;
   }
 

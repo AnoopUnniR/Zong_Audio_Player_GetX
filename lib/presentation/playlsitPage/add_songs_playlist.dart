@@ -6,6 +6,7 @@ import 'package:music_app_getx/controller/mini_player_controller.dart';
 import 'package:music_app_getx/controller/playlist_songs_list_controller.dart';
 import 'package:music_app_getx/functions/music_get_func.dart';
 import 'package:music_app_getx/presentation/miniPlayer/mini_player.dart';
+import 'package:music_app_getx/presentation/widgets/custom_appbar.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AddSongsPlaylistScreen extends StatelessWidget {
@@ -14,30 +15,16 @@ class AddSongsPlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //  final playlistSongsController = PlaylistSongsController();
-    // final HomePageController homePageController = Get.find();
     final musicFunctions = MusicFunctionsClass();
     final miniplayerController = Get.find<MiniPlayerController>();
     final currentplayer = Get.find<CurrentPlayingSongController>();
-    // final playlistSongs = PlaylsitListPageState();
     final allSongsController = Get.find<AllSongsController>();
     final playlistController = Get.find<PlaylistSongsController>();
     List songs = [];
     List songDetails = [];
     return Scaffold(
       backgroundColor: const Color(0xff121526),
-      appBar: AppBar(
-        title: const Text("Add Songs"),
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-        ),
-        toolbarHeight: 50,
-        backgroundColor: const Color.fromARGB(255, 38, 32, 63),
-      ),
+      appBar:const CustomAppbar(title: "Add Songs"),
       body: SafeArea(
         child: Stack(
           children: [
@@ -77,8 +64,8 @@ class AddSongsPlaylistScreen extends StatelessWidget {
                         //listing songs//------------------------------------------------
                         child: ListTile(
                           onTap: () async {
-                            currentplayer.currentSongUpdate(id);
-                            musicFunctions.creatingPlayerList(songs);
+                            currentplayer.currentSongUpdate(id!);
+                            // musicFunctions.creatingPlayerList(songs);
                             musicFunctions.playingAudio(index);
                             miniplayerController.isMiniPlayerVisible.value =
                                 true;
@@ -114,7 +101,7 @@ class AddSongsPlaylistScreen extends StatelessWidget {
                                     tooltip: 'add to playlist',
                                     onPressed: () {
                                       playlistController.addToPlaylist(
-                                          id, playlistId);
+                                          id!, playlistId);
                                     },
                                   )
                                 : IconButton(
@@ -125,7 +112,7 @@ class AddSongsPlaylistScreen extends StatelessWidget {
                                     tooltip: 'remove from playlist',
                                     onPressed: () {
                                       playlistController.removeFromPlaylist(
-                                          id, playlistId);
+                                          id!, playlistId);
                                     },
                                   ),
                           ),

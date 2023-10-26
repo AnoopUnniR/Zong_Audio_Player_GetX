@@ -4,7 +4,9 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:music_app_getx/constands/constand.dart';
 import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/splash_screen.dart';
+import 'package:logger/logger.dart';
 
+var logger = Logger();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();

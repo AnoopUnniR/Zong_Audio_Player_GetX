@@ -8,6 +8,7 @@ import 'package:music_app_getx/functions/music_get_func.dart';
 import 'package:music_app_getx/models/models.dart';
 import 'package:music_app_getx/presentation/musicPlayerPage/music_player_screen.dart';
 import 'package:music_app_getx/presentation/playlsitPage/add_songs_playlist.dart';
+import 'package:music_app_getx/presentation/widgets/custom_appbar.dart';
 import 'package:music_app_getx/presentation/widgets/menu_icon_home.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -22,20 +23,9 @@ class PlaylistSongsScreen extends StatelessWidget {
   final currentPlaying = Get.find<CurrentPlayingSongController>();
   @override
   Widget build(BuildContext context) {
-    playlistSongController.getPlaylistSongs(playlist.id!);
     return Scaffold(
       backgroundColor: const Color(0xff121526),
-      appBar: AppBar(
-          title: Text(playlist.playlistName),
-          centerTitle: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          toolbarHeight: 50,
-          backgroundColor: const Color.fromARGB(255, 38, 32, 63)),
+      appBar: CustomAppbar(title: playlist.playlistName),
       body: SafeArea(
         child: Stack(
           children: [
@@ -58,24 +48,17 @@ class PlaylistSongsScreen extends StatelessWidget {
                           ),
                         );
                       }
-                      List songs = [];
-                      songs.addAll(controller.songsInPlaylist);
+                      List<SongsListModel> songs = [];
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: collection.length,
                         itemBuilder: (context, index) {
-                          var title = songsList
-                              .songsList[controller.songsInPlaylist[index]]
-                              .songTitle;
-                          var artist = songsList
-                              .songsList[controller.songsInPlaylist[index]]
-                              .songArtist;
-                          var id = songsList
-                              .songsList[controller.songsInPlaylist[index]].id;
-                          var image = songsList
-                              .songsList[controller.songsInPlaylist[index]]
-                              .imageId;
+                          int indexId = songsList.songsList.indexWhere(
+                              (element) => element.id == collection[index]);
+                          SongsListModel song = songsList.songsList[indexId];
+                          songs.add(song);
+                          int id = song.id!;
                           return Padding(
                             padding: const EdgeInsets.only(
                                 left: 8, right: 8, top: 8),
@@ -89,16 +72,15 @@ class PlaylistSongsScreen extends StatelessWidget {
                                   onTap: () async {
                                     Get.to(() => MusicPlayerScreen(
                                           index: index,
-                                          songsIds: songs,
+                                          songs: songs,
                                         ));
                                     await currentPlaying.currentSongUpdate(id);
                                     await musicFucntion
-                                        .creatingPlayerList(collection);
+                                    .creatingPlayerList(songs);
                                     await musicFucntion.playingAudio(index);
-                                    
                                   },
                                   title: Text(
-                                    title,
+                                    song.songTitle,
                                     style: const TextStyle(
                                       color: Color.fromARGB(255, 37, 36, 36),
                                     ),
@@ -106,13 +88,13 @@ class PlaylistSongsScreen extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   subtitle: Text(
-                                    artist,
+                                    song.songArtist ?? "Unknown",
                                     style: const TextStyle(
                                       color: Color.fromARGB(255, 55, 55, 55),
                                     ),
                                   ),
                                   leading: QueryArtworkWidget(
-                                    id: image!,
+                                    id: song.imageId!,
                                     type: ArtworkType.AUDIO,
                                     nullArtworkWidget: Image.asset(
                                       'assets/0.png',
@@ -134,7 +116,7 @@ class PlaylistSongsScreen extends StatelessWidget {
                 ],
               ),
             ),
-             Align(
+            Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
                 child: Column(
@@ -142,7 +124,9 @@ class PlaylistSongsScreen extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Get.to(() => AddSongsPlaylistScreen(playlistId: playlist.id!,));
+                        Get.to(() => AddSongsPlaylistScreen(
+                              playlistId: playlist.id!,
+                            ));
                       },
                       child: const Text('Add Songs'),
                     ),
